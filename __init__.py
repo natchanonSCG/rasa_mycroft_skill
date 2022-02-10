@@ -40,6 +40,7 @@ class RasaSkill(MycroftSkill):
             self.RASA_API, json = {"message" : msg, "sender" : "user{}".format(self.convoID)}
         )
         self.speak("- looking response:"+str(data.json()))
+        self.log.info("- looking response:"+str(data.json()))
         # A JSON Array Object is returned: each element has a user field along
         # with a text, image, or other resource field signifying the output
         # print(json.dumps(data.json(), indent=2))
