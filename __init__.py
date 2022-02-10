@@ -27,7 +27,7 @@ class RasaSkill(MycroftSkill):
         if prompt is None and len(self.messages) > 0:
             prompt = self.messages[-1]
         # Speak message to user and save the response
-        msg = self.get_response(prompt, num_retries=-1)
+        msg = self.get_response(prompt, num_retries=0)
         # If user doesn't respond, quietly stop, allowing user to resume later
         # self.speak("requesting rasa connection")
         if msg is None:
@@ -39,8 +39,9 @@ class RasaSkill(MycroftSkill):
         data = requests.post(
             self.RASA_API, json = {"message" : msg, "sender" : "user{}".format(self.convoID)}
         )
-        self.speak("- looking response:"+str(data.json()))
-        self.log.info("- looking response:"+str(data.json()))
+        # self.speak("- looking response:"+str(data.json()))
+        # self.log.info("- looking response:"+str(data.json()))
+        
         # A JSON Array Object is returned: each element has a user field along
         # with a text, image, or other resource field signifying the output
         # print(json.dumps(data.json(), indent=2))
@@ -56,6 +57,7 @@ class RasaSkill(MycroftSkill):
         # Kills code when Rasa stop responding
         if len(self.messages) == 0:
             self.messages = ["no response from rasa"]
+            # self.speak("no response from rasa")
             return
         # Use the last dialog from Rasa to prompt for next input from the user
         prompt = self.messages[-1]
@@ -68,7 +70,7 @@ class RasaSkill(MycroftSkill):
     def handle_talk_to_rasa_intent(self, message):
         self.convoID += 1
         self.conversation_active = True
-        prompt = "สวัสดีค่าา น้องถุงปูนมาแล้ววว"
+        prompt = "waiting for input"
         self.query_rasa(prompt)
         
     # Resume chat activator that would resume the conversation thread of a chat
